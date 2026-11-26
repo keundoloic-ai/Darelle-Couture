@@ -1,0 +1,29 @@
+# Confidential business data
+*.xlsx
+*.xls
+*.csv
+*.xlsm
+
+# Excel temporary files
+~$*
+
+# Browser saved resources
+index_files/
+
+# Backup files
+*.bak
+*.zip
+
+# Environment variables
+.env
+.env.*
+
+# Windows system files
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Dependencies
+node_modules/

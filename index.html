@@ -1,0 +1,992 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Darelle Couture | Fashion & Tailoring</title>
+
+<style>
+
+
+/* ======================================
+   EXCEL FILE IMPORT
+====================================== */
+
+.excel-upload-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.excel-upload-container h3 {
+    font-size: 24px;
+    color: #24201d;
+    margin-bottom: 15px;
+}
+
+.upload-area {
+    border: 2px dashed #a67c52;
+    border-radius: 10px;
+    padding: 30px 20px;
+    margin-top: 25px;
+    background-color: #f8f5f0;
+}
+
+.upload-area h4 {
+    font-size: 20px;
+    color: #24201d;
+}
+
+.upload-btn {
+    display: inline-block;
+    background-color: #24201d;
+    color: white;
+    padding: 14px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 15px 0;
+    transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+    background-color: #a67c52;
+}
+
+#fileName {
+    font-size: 14px;
+    color: #777777;
+}
+
+#uploadStatus {
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+
+/* Responsive Charts Grid */
+
+/* ======================================
+   BUSINESS ANALYTICS CHARTS
+====================================== */
+
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px;
+    max-width: 1100px;
+    margin: 40px auto;
+}
+
+.chart-card {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    min-width: 0;
+}
+
+.chart-card h3 {
+    font-size: 24px;
+    color: #24201d;
+    margin-bottom: 30px;
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 350px;
+}
+
+/* Responsive Charts */
+
+@media (max-width: 768px) {
+
+    .chart-card {
+        padding: 15px;
+    }
+
+    .chart-wrapper {
+        height: 280px;
+    }
+
+}
+
+/* ======================================
+   KPI CARDS
+====================================== */
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    max-width: 1100px;
+    margin: 40px auto;
+}
+
+.kpi-card {
+    background-color: white;
+    padding: 30px 20px;
+    border-radius: 12px;
+    border-top: 4px solid #a67c52;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+}
+
+.kpi-card h3 {
+    font-size: 18px;
+    color: #24201d;
+    margin-bottom: 15px;
+}
+
+.kpi-card p {
+    font-size: 36px;
+    font-weight: bold;
+    color: #a67c52;
+    margin: 0;
+}
+
+/* Responsive KPI Cards */
+
+@media (max-width: 768px) {
+
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* ======================================
+   GRAND TOTAL ROW
+====================================== */
+#pivot-table tbody tr.grand-total,
+#pivot-table tbody tr.grand-total:hover {
+    background-color: #24201d;
+}
+
+#pivot-table tbody tr.grand-total td {
+    background-color: #24201d;
+}
+
+
+/* ======================================
+   BUSINESS ANALYTICS SECTION
+====================================== */
+
+#analytics {
+    background-color: #f8f5f0;
+    padding: 70px 30px;
+    text-align: center;
+}
+
+#analytics h2 {
+    font-family: Georgia, serif;
+    font-size: 36px;
+    color: #24201d;
+    margin-bottom: 20px;
+}
+
+/* Analytics Container */
+
+.analytics-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.analytics-container h3 {
+    font-size: 24px;
+    color: #24201d;
+    margin-bottom: 30px;
+}
+
+/* Pivot Table */
+
+#pivot-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Table Headers */
+
+#pivot-table th {
+    background-color: #24201d;
+    color: white;
+    padding: 18px;
+    font-size: 16px;
+}
+
+/* Table Cells */
+
+#pivot-table td {
+    padding: 20px;
+    border-bottom: 1px solid #e8dfd2;
+    font-size: 16px;
+    color: #444444;
+}
+
+/* Alternate Row Colors */
+
+#pivot-table tbody tr:nth-child(even) {
+    background-color: #f8f5f0;
+}
+
+/* Hover Effect */
+
+#pivot-table tbody tr:hover {
+    background-color: #e8dfd2;
+    transition: background-color 0.3s ease;
+}
+
+/* Service Value Column */
+
+#pivot-table td:last-child {
+    color: #a67c52;
+    font-weight: bold;
+}
+
+/* Responsive Design */
+
+@media (max-width: 600px) {
+
+    #analytics {
+        padding: 40px 15px;
+    }
+
+    .analytics-container {
+        padding: 15px;
+    }
+
+    #pivot-table th,
+    #pivot-table td {
+        padding: 12px;
+        font-size: 14px;
+    }
+}
+
+
+
+/* =========================
+   SERVICES SECTION
+========================= */
+
+#services {
+    background-color: #e8dfd2;
+    padding: 70px 30px;
+}
+
+#services h2 {
+    font-family: Georgia, serif;
+    font-size: 36px;
+    color: #24201d;
+}
+
+/* Service Grid */
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Service Cards */
+
+.service-card {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+}
+
+/* Service Images */
+
+.service-card img {
+    display: block;
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Service Information */
+
+.service-info {
+    padding: 25px;
+}
+
+.service-info h3 {
+    font-size: 24px;
+    color: #24201d;
+}
+
+.service-info p {
+    color: #666666;
+}
+
+.service-info .price {
+    font-size: 26px;
+    font-weight: bold;
+    color: #a67c52;
+}
+
+/* Responsive Design */
+
+@media (max-width: 600px) {
+    .service-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .service-card img {
+        height: 220px;
+    }
+}
+
+
+    /* =========================
+   PRODUCTS SECTION
+========================= */
+
+#products {
+    background-color: #f8f5f0;
+    padding: 70px 30px;
+}
+
+#products h2 {
+    font-family: Georgia, serif;
+    font-size: 36px;
+    color: #24201d;
+}
+
+.section-description {
+    color: #777777;
+    font-size: 17px;
+    margin-bottom: 40px;
+}
+
+/* Product Grid */
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Product Cards */
+
+.product-card {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+}
+
+/* Product Images */
+
+.product-card img {
+    width: 100%;
+    height: 400px;
+    object-fit: contain;
+    background-color: #ffffff;
+}
+
+/* Product Information */
+
+.product-info {
+    padding: 25px;
+}
+
+.product-info h3 {
+    font-size: 22px;
+    color: #24201d;
+}
+
+.product-info p {
+    color: #666666;
+}
+
+/* Product Price */
+
+.product-info .price {
+    font-size: 26px;
+    font-weight: bold;
+    color: #a67c52;
+}
+
+/* Responsive Design */
+
+@media (max-width: 900px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* General Settings */
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f8f5f0;
+        color: #333333;
+    }
+
+    /* Header */
+
+    header {
+        background-color: #24201d;
+        color: white;
+        text-align: center;
+        padding: 30px 20px;
+    }
+
+    header h1 {
+        letter-spacing: 5px;
+        margin: 0;
+    }
+
+    header p {
+        color: #d4af77;
+        letter-spacing: 3px;
+    }
+
+    /* Navigation Menu */
+
+    nav {
+        margin-top: 25px;
+    }
+
+    nav a {
+        display: inline-block;
+        color: white;
+        text-decoration: none;
+        margin: 8px 15px;
+        font-weight: bold;
+    }
+
+    nav a:hover {
+        color: #d4af77;
+    }
+
+    /* Hero Section */
+
+      
+.hero {
+    background-color: #24201d;
+
+    background-image: linear-gradient(
+        rgba(0, 0, 0, 0.50),
+        rgba(0, 0, 0, 0.50)
+    ), url("images/bannier.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    text-align: center;
+    padding: 150px 20px;
+    color: white;
+}
+
+
+    .hero h2 {
+    font-family: Georgia, serif;
+    font-size: 45px;
+    color: white;
+}
+
+
+    .hero p {
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+
+    /* Buttons */
+
+    .btn {
+        display: inline-block;
+        background-color: #24201d;
+        color: white;
+        padding: 15px 25px;
+        text-decoration: none;
+        margin: 10px;
+        border-radius: 5px;
+    }
+
+    .btn:hover {
+        background-color: #a67c52;
+    }
+
+    /* General Sections */
+
+    section {
+        padding: 50px 20px;
+        text-align: center;
+    }
+
+    /* Footer */
+
+    footer {
+        background-color: #24201d;
+        color: white;
+        text-align: center;
+        padding: 20px;
+    }
+
+@media (max-width: 900px) {
+
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+#pivot-table tbody tr.grand-total td { color: white; }
+#pivot-table tbody tr.grand-total td:last-child { color: #d4af77; }
+</style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+
+        <h1>DARELLE COUTURE</h1>
+        <p>Fashion & Tailoring</p>
+
+        <!-- Navigation Menu -->
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#products">Products</a>
+            <a href="#services">Services</a>
+            <a href="#analytics">Analytics</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
+    </header>
+
+    <main>
+
+        <!-- HOME SECTION -->
+        <section id="home" class="hero">
+
+            <h2>Elegance in Every Stitch</h2>
+
+            <p>
+                Discover our clothing collection
+                and professional tailoring services.
+            </p>
+
+            <a href="#products" class="btn">Explore Products</a>
+            <a href="#services" class="btn">Our Services</a>
+
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about">
+
+            <h2>Welcome to Darelle Couture</h2>
+
+            <p>
+                Darelle Couture specializes in clothing,
+                alterations, garment repairs and
+                custom-made fashion.
+            </p>
+
+</section>
+
+<!-- SERVICES SECTION -->
+
+<section id="services">
+
+    <h2>Our Tailoring Services</h2>
+
+    <p class="section-description">
+        Professional care for every garment.
+    </p>
+
+    <div class="service-grid">
+
+        <!-- SERVICE 1: HEMMING -->
+
+        <article class="service-card">
+
+            <img src="images/hemming.png"
+                 alt="Trouser hemming service">
+
+            <div class="service-info">
+                <h3>Hemming</h3>
+
+                <p>Professional trouser shortening.</p>
+
+                <p class="price">$15.00 CAD</p>
+
+                <a href="#contact" class="btn">
+                    Request Service
+                </a>
+            </div>
+
+        </article>
+
+        <!-- SERVICE 2: WAIST ADJUSTMENT -->
+
+        <article class="service-card">
+
+            <img src="images/waist-adjustment.png"
+                 alt="Waist adjustment service">
+
+            <div class="service-info">
+                <h3>Waist Adjustment</h3>
+
+                <p>Perfect fit for your clothing.</p>
+
+                <p class="price">$20.00 CAD</p>
+
+                <a href="#contact" class="btn">
+                    Request Service
+                </a>
+            </div>
+
+        </article>
+
+        <!-- SERVICE 3: ZIP REPAIR -->
+
+        <article class="service-card">
+
+            <img src="images/zip-repair.png"
+                 alt="Zipper repair service">
+
+            <div class="service-info">
+                <h3>Zip Repair</h3>
+
+                <p>Repair damaged zippers.</p>
+
+                <p class="price">$20.00 CAD</p>
+
+                <a href="#contact" class="btn">
+                    Request Service
+                </a>
+            </div>
+
+        </article>
+
+        <!-- SERVICE 4: CUSTOM TAILORING -->
+
+        <article class="service-card">
+
+            <img src="images/custom-tailoring.png"
+                 alt="Custom tailoring service">
+
+            <div class="service-info">
+                <h3>Custom Made Pant</h3>
+
+                <p>Tailored to your measurements.</p>
+
+                <p class="price">$50.00 CAD</p>
+
+                <a href="#contact" class="btn">
+                    Request Service
+                </a>
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- ============================= -->
+<!-- BUSINESS ANALYTICS SECTION    -->
+<!-- ============================= -->
+
+<section id="analytics">
+
+    <h2>Business Analytics</h2>
+
+    <p class="section-description">
+        Explore our business performance
+        and service statistics.
+    </p>
+
+
+<!-- ======================================
+     EXCEL FILE IMPORT
+======================================= -->
+
+<div class="excel-upload-container">
+
+    <h3>Import Business Data</h3>
+
+    <p>Upload your Excel file to update your business analytics.</p>
+
+    <div class="upload-area">
+
+        <h4>Select your Excel file</h4>
+
+        <p>Supported format: .xlsx</p>
+
+        <label for="excelFile" class="upload-btn">
+            Browse Excel File
+        </label>
+
+        <input
+            type="file"
+            id="excelFile"
+            accept=".xlsx"
+            hidden
+        >
+
+        <p id="fileName">No file selected</p>
+
+        <p id="uploadStatus" role="status"></p>
+
+    </div>
+
+</div>
+
+<!-- ============================= -->
+<!-- KEY PERFORMANCE INDICATORS    -->
+<!-- ============================= -->
+
+<div class="kpi-grid">
+
+    <div class="kpi-card">
+
+        <h3>Total Orders</h3>
+
+        <p id="kpi-orders">0</p>
+
+    </div>
+
+    <div class="kpi-card">
+
+        <h3>Service Value (CAD)</h3>
+
+        <p id="kpi-revenue">$0.00</p>
+
+    </div>
+
+    <div class="kpi-card">
+
+        <h3>Service Categories</h3>
+
+        <p id="kpi-categories">0</p>
+
+    </div>
+
+</div>
+
+
+    <div class="analytics-container">
+
+        <h3>Service Performance</h3>
+
+        <table id="pivot-table">
+
+            <thead>
+                <tr>
+                    <th>Service Category</th>
+                    <th>Total Orders</th>
+                    <th>Service Value (CAD)</th>
+                </tr>
+            </thead>
+
+            <tbody id="pivot-table-body">
+
+                <!-- JavaScript will insert data here -->
+
+            </tbody>
+            
+
+        </table>
+
+    </div>
+
+
+<!-- ============================= -->
+<!-- BUSINESS ANALYTICS CHARTS     -->
+<!-- ============================= -->
+
+<div class="charts-grid">
+
+    <!-- Orders Chart -->
+
+    <div class="chart-card">
+
+        <h3>Orders by Service</h3>
+
+        <div class="chart-wrapper">
+
+            <canvas id="ordersChart"></canvas>
+
+        </div>
+
+    </div>
+
+    <!-- Service Value Chart -->
+
+    <div class="chart-card">
+
+        <h3>Service Value (CAD)</h3>
+
+        <div class="chart-wrapper">
+
+            <canvas id="revenueChart"></canvas>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+        
+<!-- PRODUCTS SECTION -->
+
+<section id="products">
+
+    <h2>Our Collection</h2>
+
+    <p class="section-description">
+        Discover elegance, comfort and timeless fashion.
+    </p>
+
+    <div class="product-grid">
+
+        <!-- PRODUCT 1 -->
+
+        <article class="product-card">
+
+            <img src="images/pant-brown.jpeg"
+                 alt="Brown Palazzo Pant">
+
+            <div class="product-info">
+
+                <h3>Brown Palazzo Pant</h3>
+
+                <p>Size: Small</p>
+                <p>Colour: Brown</p>
+
+                <p class="price">$30.00 CAD</p>
+
+                <a href="#contact" class="btn">
+                    Enquire Now
+                </a>
+
+            </div>
+
+        </article>
+
+        <!-- PRODUCT 2 -->
+
+        <article class="product-card">
+
+            <img src="images/pant-pink.jpg"
+                 alt="Pink Palazzo Pant">
+
+            <div class="product-info">
+
+                <h3>Pink Palazzo Pant</h3>
+
+                <p>Size: Medium</p>
+                <p>Colour: Pink</p>
+
+                <p class="price">$30.00 CAD</p>
+
+                <a href="#contact" class="btn">
+                    Enquire Now
+                </a>
+
+            </div>
+
+        </article>
+
+        <!-- PRODUCT 3 -->
+
+        <article class="product-card">
+
+            <img src="images/pant-green.jpg"
+                 alt="Green Palazzo Pant">
+
+            <div class="product-info">
+
+                <h3>Green Palazzo Pant</h3>
+
+                <p>Size: Small</p>
+                <p>Colour: Green</p>
+
+                <p class="price">$30.00 CAD</p>
+
+                <a href="#contact" class="btn">
+                    Enquire Now
+                </a>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Darelle Couture. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+    <script src="analytics.js"></script>
+
+</body>
+
+</html>
