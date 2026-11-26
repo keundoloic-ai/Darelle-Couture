@@ -78,217 +78,23 @@ if (typeof ChartDataLabels !== "undefined" &&
 }
 
 // ======================================
-// LOAD EXCEL FILE
+// INITIALIZE CHARTS WITHOUT SERVER DATA
 // ======================================
-
-async function loadExcelData() {
-
-    try {
-
-        const response = await fetch(
-            "Data/Darelle_IS_Analys.xlsx"
-        );
-
-        if (!response.ok) {
-            throw new Error(
-                "HTTP Error: " + response.status
-            );
-        }
-
-        const data = await response.arrayBuffer();
-
-        const workbook = XLSX.read(data, {
-            type: "array"
-        });
-
-        console.log("Excel file loaded successfully!");
-
-        console.log("Available worksheets:",
-            workbook.SheetNames
-        );
-
-
-// Select the raw data worksheet
-
-const worksheet = workbook.Sheets[
-    "Darelle_IS_Analysis xlsx"
-];
-
-// Check if the worksheet exists
-
-if (!worksheet) {
-    throw new Error("Worksheet not found!");
-}
-
-// Convert Excel data into JavaScript objects
-
-const records = XLSX.utils.sheet_to_json(worksheet);
-
-// Display the extracted data
-
-console.log("Excel data extracted successfully!");
-
-console.log("Total records:", records.length);
-
-// Display only the fields needed for analytics
-
-console.table(records.map(record => ({
-    service_name: record.service_name,
-    base_price: record.base_price,
-    order_id: record.order_id
-})));
-
-
-// ======================================
-// CREATE DYNAMIC PIVOT TABLE
-// ======================================
-
-const pivotTable = {};
-
-// Group records by service
-
-records.forEach(record => {
-
-    const service = record.service_name;
-    const price = Number(record.base_price);
-
-    // Create a new service category
-
-    if (!pivotTable[service]) {
-
-        pivotTable[service] = {
-            totalOrders: 0,
-            serviceValue: 0
-        };
-
+function initializeCharts() {
+    if (typeof Chart === "undefined") {
+        throw new Error("Chart.js is not available.");
     }
-
-    // Count orders
-
-    pivotTable[service].totalOrders += 1;
-
-    // Calculate service value
-
-    pivotTable[service].serviceValue += price;
-
-});
-
-// Display PivotTable results
-
-console.log("PivotTable created successfully!");
-
-console.table(pivotTable);
-
-
-// ======================================
-// DISPLAY PIVOT TABLE ON WEBSITE
-// ======================================
-
-const tableBody = document.getElementById(
-    "pivot-table-body"
-);
-
-// Clear existing table data
-
-tableBody.innerHTML = "";
-
-// Canadian dollar formatter
-
-const currency = new Intl.NumberFormat("en-CA", {
-    style: "currency",
-    currency: "CAD"
-});
-
-// Insert each service into the HTML table
-
-Object.entries(pivotTable).forEach(([service, values]) => {
-
-    const row = document.createElement("tr");
-
-    const serviceName = service
-        .replaceAll("_", " ")
-        .replace(/\b\w/g, letter => letter.toUpperCase());
-
-    row.insertCell().textContent = serviceName;
-
-    row.insertCell().textContent = values.totalOrders;
-
-    row.insertCell().textContent =
-        currency.format(values.serviceValue);
-
-    tableBody.appendChild(row);
-
-});
-
-console.log("PivotTable displayed on website successfully!");
-
-
-// ======================================
-// CALCULATE GRAND TOTAL
-// ======================================
-
-let totalOrders = 0;
-let totalServiceValue = 0;
-
-// Calculate totals
-
-Object.values(pivotTable).forEach(values => {
-
-    totalOrders += values.totalOrders;
-
-    totalServiceValue += values.serviceValue;
-
-});
-
-// Create the Grand Total row
-
-const totalRow = document.createElement("tr");
-
-totalRow.classList.add("grand-total");
-
-totalRow.insertCell().textContent = "Grand Total";
-
-totalRow.insertCell().textContent = totalOrders;
-
-totalRow.insertCell().textContent =
-    currency.format(totalServiceValue);
-
-// Add the total row to the table
-
-tableBody.appendChild(totalRow);
-
-// Display totals in the console
-
-console.log("Total Orders:", totalOrders);
-
-console.log("Total Service Value:", totalServiceValue);
-
-console.log("Grand Total calculated successfully!");
-
-// ======================================
-// UPDATE KPI CARDS
-// ======================================
-
-// Display total orders
-
-document.getElementById("kpi-orders").textContent =
-    totalOrders;
-
-// Display total service value
-
-document.getElementById("kpi-revenue").textContent =
-    currency.format(totalServiceValue);
-
-// Display number of service categories
-
-document.getElementById("kpi-categories").textContent =
-    Object.keys(pivotTable).length;
-
-// Confirmation message
-
-console.log("KPI cards updated successfully!");
-
-
+    const currency = new Intl.NumberFormat("en-CA", {
+        style: "currency", currency: "CAD"
+    });
+    const pivotTable = Object.create(null);
+    if (!document.getElementById("ordersChart") || !document.getElementById("revenueChart")) {
+        throw new Error("Chart canvases could not be found.");
+    }
+    if (Chart.getChart("ordersChart") && Chart.getChart("revenueChart")) return;
+    // Clear any partially initialized charts before retrying.
+    Chart.getChart("ordersChart")?.destroy();
+    Chart.getChart("revenueChart")?.destroy();
 // ======================================
 // CREATE ORDERS BY SERVICE CHART
 // ======================================
@@ -314,7 +120,7 @@ const ordersCanvas = document.getElementById("ordersChart");
 // Create the chart
 
 
-const ordersChart = new Chart(ordersCanvas, {
+new Chart(ordersCanvas, {
 
     type: "bar",
 
@@ -404,7 +210,7 @@ const revenueCanvas = document.getElementById(
 // REVENUE CHART CONFIGURATION
 // ======================================
 
-const revenueChart = new Chart(revenueCanvas, {
+new Chart(revenueCanvas, {
 
     type: "bar",
 
@@ -513,15 +319,7 @@ const revenueChart = new Chart(revenueCanvas, {
 });
 
 console.log("Revenue chart created successfully!");
-
-    } catch (error) {
-
-        console.error("Error loading Excel file:", error);
-
-    }
 }
-
-loadExcelData();
 
 // ======================================
 // BUILD UPLOADED PIVOT TABLE
@@ -679,6 +477,9 @@ function updateUploadedCharts(newPivotTable) {
         service => service.serviceValue
     );
 
+    // Ensure charts exist before updating them
+    initializeCharts();
+
     // Retrieve existing charts
 
     const ordersChart = Chart.getChart("ordersChart");
@@ -717,11 +518,26 @@ function updateUploadedCharts(newPivotTable) {
 // DYNAMIC EXCEL FILE IMPORT
 // ======================================
 
+function initializeAnalytics() {
 const excelFileInput = document.getElementById("excelFile");
 
 const fileNameDisplay = document.getElementById("fileName");
 
 const uploadStatus = document.getElementById("uploadStatus");
+
+if (!excelFileInput || !fileNameDisplay || !uploadStatus) {
+    console.error("Excel import controls could not be found.");
+    return;
+}
+try {
+    initializeCharts();
+    updateUploadedDashboard(Object.create(null));
+    uploadStatus.textContent = "Select an Excel file to display your business analytics.";
+} catch (error) {
+    console.error("Analytics initialization error:", error);
+    uploadStatus.textContent = error.message;
+    uploadStatus.style.color = "red";
+}
 
 excelFileInput.addEventListener("change", async function(event) {
 
@@ -848,7 +664,7 @@ if (uploadedData.length > maxRecords) {
                 typeof row.base_price !== "number" ||
                 !Number.isFinite(row.base_price) ||
                 row.base_price < 0 ||
-                row.order_id === null ||
+                row.order_id == null ||
                 String(row.order_id).trim() === ""
             ) {
 
@@ -872,12 +688,9 @@ if (uploadedData.length > maxRecords) {
 
 const newPivotTable = buildUploadedPivotTable(uploadedData);
 
-// UPDATE DASHBOARD
+// UPDATE DASHBOARD AND CHARTS
 
-updateUploadedDashboard(newPivotTable);
-
-// UPDATE DASHBOARD
-
+updateUploadedCharts(newPivotTable);
 updateUploadedDashboard(newPivotTable);
 
 console.log("Dynamic PivotTable recalculated successfully!");
@@ -913,3 +726,11 @@ console.log("Dynamic PivotTable recalculated successfully!");
 
 });
 
+
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeAnalytics, { once: true });
+} else {
+    initializeAnalytics();
+}
